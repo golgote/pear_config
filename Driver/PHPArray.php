@@ -177,7 +177,7 @@ class PHPArray extends AbstractDriver implements DriverInterface, WritableInterf
                     $string .= $parentString . "['#']";
                     foreach ($attributes as $attr => $val) {
                         $attrString .= $parentString . "['@']"
-                                       . "['" . $attr . "'] = '" . addcslashes($val, "\\'") . "';\n";
+                                       . "['" . $attr . "'] = '" . addcslashes((string)$val, "\\'") . "';\n";
                     }
                 } else {
                     $string .= $parentString;
@@ -191,6 +191,8 @@ class PHPArray extends AbstractDriver implements DriverInterface, WritableInterf
                     $string .= ($obj->getContent())
                         ? 'true'
                         : 'false';
+                } else if (is_object($obj->getContent())) {
+                    $string .= (string)$obj->getContent();
                 } else if ($obj->getContent() === null) {
                     $string .= 'null';
                 }

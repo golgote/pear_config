@@ -22,12 +22,12 @@ class Container
      * Container object name
      * @var  string
      */
-    private string $name;
+    private ?string $name;
     /**
      * Container object content
-     * @var  string
+     * @var  mixed
      */
-    private string $content;
+    private $content;
     /**
      * Container object children
      * @var Container[]
@@ -56,13 +56,13 @@ class Container
      *
      * @param string $type       Type of container object
      * @param string $name       Name of container object
-     * @param string $content    Content of container object
+     * @param mixed  $content    Content of container object
      * @param ?array $attributes Array of attributes for container object
      */
     public function __construct(
         string $type = 'section',
-        string $name = '',
-        string $content = '',
+        ?string $name = null,
+        $content = null,
         array $attributes = null
     ) {
         $this->type = $type;
@@ -94,7 +94,7 @@ class Container
      *
      * @param string     $type       type of item: directive, section, comment, blank...
      * @param string     $name       item name
-     * @param string     $content    item content
+     * @param mixed      $content    item content
      * @param ?array     $attributes item attributes
      * @param string     $where      choose a position 'bottom', 'top', 'after', 'before'
      * @param ?Container $target     needed if you choose 'before' or 'after' for where
@@ -104,8 +104,8 @@ class Container
      */
     public function createItem(
         string $type,
-        string $name,
-        string $content,
+        ?string $name = null,
+        $content,
         array $attributes = null,
         string $where = 'bottom',
         Container $target = null
@@ -318,7 +318,7 @@ class Container
      *
      * @param ?string $type       Type of item: directive, section, comment, blank...
      * @param ?string $name       Item name
-     * @param ?string $content    Find item with this content
+     * @param ?mixed  $content    Find item with this content
      * @param ?array  $attributes Find item with attribute set to the given value
      * @param int     $index      Index of the item in the returned object list. If it is not set, will try to return
      *                            the last item with this name.
@@ -330,7 +330,7 @@ class Container
     public function getItem(
         string $type = null,
         string $name = null,
-        string $content = null,
+        $content = null,
         array $attributes = null,
         int $index = -1
     )
@@ -564,9 +564,9 @@ class Container
 
     /**
      * Get this item's content.
-     * @return string    item's content
+     * @return mixed    item's content
      */
-    public function getContent(): string
+    public function getContent()
     {
         return $this->content;
     }
@@ -574,11 +574,11 @@ class Container
     /**
      * Set this item's content.
      *
-     * @param string $content
+     * @param mixed $content
      *
      * @return void
      */
-    public function setContent(string $content): void
+    public function setContent($content): void
     {
         $this->content = $content;
     }
@@ -622,7 +622,7 @@ class Container
      * Get this item's attributes.
      * @return array    item's attributes
      */
-    public function getAttributes(): array
+    public function getAttributes(): ?array
     {
         return $this->attributes;
     }
@@ -657,7 +657,7 @@ class Container
      * If the directive does not exist, it will be created at the bottom.
      *
      * @param string $name            Name of the directive to look for
-     * @param string $content         New content
+     * @param mixed  $content         New content
      * @param int    $index           Index of the directive to set,
      *                                in case there are more than one directive
      *                                with the same name
@@ -665,7 +665,7 @@ class Container
      * @return Container newly set directive
      * @throws Exception
      */
-    public function setDirective(string $name, string $content, int $index = -1): Container
+    public function setDirective(string $name, $content, int $index = -1): Container
     {
         try {
             $item = $this->getItem('directive', $name, null, null, $index);
@@ -682,7 +682,7 @@ class Container
      * This is a helper method that calls createItem
      *
      * @param string     $name       Name of new directive
-     * @param string     $content    Content of new directive
+     * @param mixed      $content    Content of new directive
      * @param ?array     $attributes Directive attributes
      * @param string     $where      Position : 'top', 'bottom', 'before', 'after'
      * @param ?Container $target     Needed when $where is 'before' or 'after'
@@ -692,7 +692,7 @@ class Container
      */
     public function createDirective(
         string $name,
-        string $content,
+        $content,
         array $attributes = null,
         string $where = 'bottom',
         Container $target = null
